@@ -37,7 +37,74 @@
       {% endfor %}
     </tbody>
   </table>
+  <h2>Party Details</h2>
 
+  <!-- Add Party Form -->
+  <form method="POST" action="{{ url_for('party.add_party') }}">
+    <input type="text" name="party_name" placeholder="Party Name" required />
+    <input
+      type="text"
+      name="contact_details"
+      placeholder="Contact Details"
+      required
+    />
+    <input
+      type="text"
+      name="order_status"
+      placeholder="Order Status"
+      required
+    />
+    <input type="datetime-local" name="order_reminder" required />
+    <button type="submit">Add Party</button>
+  </form>
+
+  <!-- Searchable Select -->
+  <label for="partySearch">Search Party:</label>
+  <select id="partySearch" style="width: 300px"></select>
+
+  <!-- Party List with Delete -->
+  <ul>
+    {% for party in Party.query.all() %}
+    <li>
+      {{ party.party_name }} - {{ party.contact_details }}
+      <form
+        method="POST"
+        action="{{ url_for('party.delete_party', party_id=party.id) }}"
+        style="display: inline"
+      >
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <!-- Include jQuery + Select2 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    rel="stylesheet"
+  />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $("#partySearch").select2({
+        placeholder: "Search for a party",
+        ajax: {
+          url: "{{ url_for('party.search_party') }}",
+          dataType: "json",
+          delay: 250,
+          data: function (params) {
+            return { q: params.term };
+          },
+          processResults: function (data) {
+            return { results: data };
+          },
+          cache: true,
+        },
+      });
+    });
+  </script>
   <div class="actions">
     <button type="button" class="print-button" onclick="window.print();">
       Print

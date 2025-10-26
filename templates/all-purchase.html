@@ -1,15 +1,25 @@
 {% extends 'base.html' %} {% block title %}All Purchases{% endblock %} {% block
 content %}
 <style>
-  /* Media query for print */
   @media print {
-    /* Hide the Print button when printing */
     .print-button {
       display: none;
     }
   }
 </style>
-<div class="container mt-4">
+
+<div class="container mt-4 print">
+  <a
+    href="{{ url_for('dashboard.index') }}"
+    class="btn btn-secondary print print-button"
+    >← Back to Dashboard</a
+  >
+  <a
+    href="{{ url_for('party.party_list') }}"
+    class="print-button btn-info print btn mt-3"
+    >View Party List</a
+  >
+
   <h1>Purchase List</h1>
 
   <!-- User Details -->
@@ -19,9 +29,16 @@ content %}
     <p><strong>Mobile:</strong> {{ user.mobile }}</p>
   </div>
 
-  <!-- Combined Stock Items -->
-  <h2>Items (Low Stock / Expired)</h2>
+  <!-- Purchase Form -->
   <form id="purchaseForm">
+    <input type="hidden" name="selected_party_id" id="selected_party_id" />
+    <input
+      type="hidden"
+      name="selected_party_mobile"
+      id="selected_party_mobile"
+    />
+
+    <h2>Items (Low Stock / Expired)</h2>
     <table class="table table-bordered">
       <thead class="table-light">
         <tr>
@@ -38,7 +55,7 @@ content %}
               type="number"
               name="purchase_qty_{{ item_name }}"
               min="1"
-              class="form-control print-button"
+              class="form-control"
               placeholder="Qty"
             />
           </td>
@@ -55,49 +72,180 @@ content %}
       >
         Print
       </button>
-      <!-- Uncomment the button below to enable submission -->
-      <!-- <button type="submit" class="btn btn-success">Submit Purchase</button> -->
+      <button
+        type="submit"
+        class="btn btn-success print-button"
+        id="submitBtn"
+        disabled
+      >
+        Submit Purchase
+      </button>
     </div>
   </form>
 
   <!-- Additional Actions -->
+  <!--
   <div class="mt-3">
-    <!-- Button to Add Expired Items -->
-    <!-- Uncomment this button and the associated script function if needed -->
-    <!-- <button class="btn btn-warning" onclick="addExpiredItems()">Add Expired Items</button> -->
+    <button class="btn btn-warning print-button" onclick="addExpiredItems()">
+      Add Expired Items
+    </button>
   </div>
-</div>
+-->
+  <!-- Searchable Party Select -->
+  <label for="partySearch" class="mt-4 print-button">Search Party:</label>
+  <select id="partySearch" style="width: 300px"></select>
 
-<script>
-  // Prevent default form submission
-  document
-    .getElementById("purchaseForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-      alert("Form submitted, but no data is being stored.");
-    });
+  <!-- Party List with Delete -->
+  <ul class="mt-3 print-button">
+    {% for party in party_data %}
+    <li>
+      {{ party.party_name }} - {{ party.contact_details }}
+      <form
+        method="POST"
+        action="{{ url_for('party.delete_party', party_id=party.id) }}"
+        style="display: inline"
+      >
+        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
 
-  // Function to add expired items to the list
-  function addExpiredItems() {
-    fetch("/add-expired", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message === "Expired products added") {
-          alert("Expired products added successfully.");
-          window.location.reload(); // Refresh to show updated items
-        } else {
-          alert("Error adding expired items.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Failed to add expired items.");
+  <!-- Select2 + jQuery -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    rel="stylesheet"
+  />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $("#partySearch").select2({
+        placeholder: "Search for a party",
+        containerCssClass: "print-button",
+        ajax: {
+          url: "{{ url_for('party.search_party') }}",
+          dataType: "json",
+          delay: 250,
+          data: function (params) {
+            return { q: params.term };
+          },
+          processResults: function (data) {
+            return { results: data };
+          },
+          cache: true,
+        },
       });
-  }
-</script>
+
+      $("#partySearch").on("select2:select", function (e) {
+        const selectedId = e.params.data.id;
+        const mobile = e.params.data.mobile.replace(/\D/g, "");
+        $("#selected_party_id").val(selectedId);
+        $("#selected_party_mobile").val(mobile);
+        $("#submitBtn").prop("disabled", false);
+      });
+    });
+    document
+      .getElementById("purchaseForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const partyId = document.getElementById("selected_party_id").value;
+        const mobile = document.getElementById("selected_party_mobile").value;
+        const selectedPartyName =
+          $("#partySearch").select2("data")[0]?.text || "N/A";
+
+        if (!partyId || !mobile) {
+          alert("Please select a party before submitting.");
+          return;
+        }
+
+        const firm = "{{ user.firm_name }}";
+        const email = "{{ user.email }}";
+        const userMobile = "{{ user.mobile }}";
+        const date = new Date();
+        const formattedDate = date.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+        const formattedTime = date.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        let items = [];
+        let totalQty = 0;
+        let estimatedCost = 0;
+
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach((row, index) => {
+          const product = row.cells[0].innerText.trim();
+          const qty = parseInt(row.querySelector("input").value.trim());
+          if (qty && qty > 0) {
+            totalQty += qty;
+            estimatedCost += qty * 10; // Replace with actual unit price if available
+            items.push(`${index + 1}. ${product.padEnd(18)} | Qty: ${qty}`);
+          }
+        });
+
+        if (items.length === 0) {
+          alert("Please enter at least one purchase quantity.");
+          return;
+        }
+
+        const referenceId = "PO-" + date.getTime().toString().slice(-6);
+
+        const message =
+          `🧾 *Purchase Order Summary*\n\n` +
+          `📌 *Reference ID:* ${referenceId}\n` +
+          `📅 *Date:* ${formattedDate} | ${formattedTime}\n\n` +
+          `👤 *Firm:* ${firm}\n` +
+          `📧 *Email:* ${email}\n` +
+          `📱 *Mobile:* ${userMobile}\n\n` +
+          `📦 *Items Ordered:*\n` +
+          `────────────────────────────\n` +
+          items.join("\n") +
+          `\n` +
+          `────────────────────────────\n` +
+          `📊 *Total Quantity:* ${totalQty}\n` +
+          `💰 *Estimated Cost:* ₹${estimatedCost.toFixed(2)}\n\n` +
+          `🔽 *Recipient:* ${selectedPartyName}\n` +
+          `📍 *Status:* Pending Confirmation\n\n` +
+          `🙏 Thank you for your continued partnership.\nPlease confirm receipt and expected delivery timeline.`;
+
+        const encoded = encodeURIComponent(message);
+        const whatsappURL = `https://wa.me/${mobile}?text=${encoded}`;
+
+        // ✅ Notify user to print manually
+        alert(
+          "Purchase submitted. You can now click the Print button to save this screen as PDF."
+        );
+
+        // ✅ Open WhatsApp message
+        window.open(whatsappURL, "_blank");
+      });
+
+    function addExpiredItems() {
+      fetch("/add-expired", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message === "Expired products added") {
+            alert("Expired products added successfully.");
+            window.location.reload();
+          } else {
+            alert("Error adding expired items.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Failed to add expired items.");
+        });
+    }
+  </script>
+</div>
 {% endblock %}

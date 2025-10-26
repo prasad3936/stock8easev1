@@ -10,6 +10,7 @@ from services.dashboard_service import Dashboard  # Import models
 from services.party_service import Party  # Import models
 from services.staff_service import Staff  # Import models
 from services.billing_service import Billing  # Import models
+from services.party_service import Party  # Import models
 
 # Initialize the app and db
 with app.app_context():

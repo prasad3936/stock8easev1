@@ -384,6 +384,10 @@ def total_profit():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+from flask import jsonify
+from services.billing_service import Billing
+
+    
 @billing_bp.route('/expired-items', methods=['GET'])
 def expired_items():
     try:

@@ -1,6 +1,8 @@
 # services/dashboard_service.py
 from flask import Blueprint, render_template,jsonify,url_for
 from datetime import datetime
+
+from sqlalchemy import func
 from extensions import db
 from services.stock_service import Stock
 from services.billing_service import Billing
@@ -171,3 +173,15 @@ def send_dashboard_reminder():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def get_total_profit():
+    total_profit = db.session.query(func.sum(Billing.total_profit)) \
+        .filter(Billing.status == 'Paid') \
+        .scalar()
+    return total_profit or 0  # Return 0 if result is None
+
+from flask import jsonify
+
+@dashboard_bp.route('/total_profit')
+def total_profit_view():
+    profit = get_total_profit()
+    return jsonify({"total_profit": profit or 0})

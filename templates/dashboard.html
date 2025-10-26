@@ -61,11 +61,15 @@
             <li class="nav-item">
               <a class="nav-link" href="/billing/create">Billing</a>
             </li>
-            <!---
+            <li class="nav-item">
+              <a class="nav-link" href="/party/party_list">Party</a>
+              <!---
             <li class="nav-item">
               <a class="nav-link" href="/reports/all_sales">Reports</a>
             </li>
           -->
+            </li>
+
             <li class="nav-item">
               <a class="nav-link" href="/account/account">Profile</a>
             </li>
@@ -131,7 +135,7 @@
             <div class="card-header">Total Profit Today</div>
             <div class="card-body">
               <h5 class="card-title" id="todayProfit">Loading...</h5>
-              <p class="card-text">Total profit from sales.</p>
+              <p class="card-text">Total profit from sales Today.</p>
             </div>
           </div>
         </div>
@@ -191,6 +195,7 @@
             <div class="card-body">
               <h5 class="card-title" id="limitedStockItems">Loading...</h5>
               <p class="card-text">Items with stock quantity less than 10.</p>
+
               <a href="/dashboard/purchase" class="btn btn-primary"
                 >Order Now</a
               >
@@ -256,7 +261,7 @@
 
       // Fetch and display total profit
       function fetchTotalProfit() {
-        fetch("/billing/total-profit")
+        fetch("/dashboard/total_profit")
           .then((response) => response.json())
           .then((data) => {
             if (data.total_profit !== undefined) {

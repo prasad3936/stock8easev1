@@ -1,0 +1,49 @@
+{% extends "base.html" %} {% block title %}Party Management{% endblock %} {%
+block content %}
+<div class="container mt-4">
+  <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary mb-3"
+    >← Back to Dashboard</a
+  >
+  <h2>Add New Party</h2>
+
+  <!-- Add Party Form -->
+  <form method="POST" action="{{ url_for('party.add_party') }}">
+    <div class="mb-3">
+      <label for="party_name" class="form-label">Party Name</label>
+      <input type="text" class="form-control" name="party_name" required />
+    </div>
+    <div class="mb-3">
+      <label for="firm_name" class="form-label">Firm Name</label>
+      <input type="text" class="form-control" name="firm_name" required />
+    </div>
+    <div class="mb-3">
+      <label for="contact_details" class="form-label">Contact Details</label>
+      <input type="text" class="form-control" name="contact_details" required />
+    </div>
+    <div class="mb-3">
+      <label for="order_status" class="form-label">Order Status</label>
+      <select class="form-select" name="order_status" required>
+        <option value="Ordered">Ordered</option>
+        <option value="Pending">Pending</option>
+        <option value="Delivered">Delivered</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="order_reminder" class="form-label">Order Reminder</label>
+      <input
+        type="datetime-local"
+        class="form-control"
+        name="order_reminder"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-success">Add Party</button>
+
+    <a href="{{ url_for('party.party_list') }}" class="btn btn-info mt-3"
+      >View Party List</a
+    >
+  </form>
+
+  <hr />
+  {% endblock %}
+</div>

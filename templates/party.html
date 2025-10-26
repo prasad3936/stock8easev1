@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block title %}Party List{% endblock %} {% block
+content %}
+<div class="container mt-4">
+  <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary mb-3"
+    >← Back to Dashboard</a
+  >
+  <h2>Party Payment Summary</h2>
+
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Party Name</th>
+        <th>Firm Name</th>
+        <th>Contact</th>
+        <th>Payment Status</th>
+        <th>Remaining Amount</th>
+        <th>Action</th>
+        <!-- Added header for Delete button -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for party in party_data %}
+      <tr>
+        <td>{{ party.name }}</td>
+        <td>{{ party.firm }}</td>
+        <td>{{ party.contact }}</td>
+        <td>
+          {% if party.status == 'Paid' %}
+          <span class="badge bg-success">Paid</span>
+          {% else %}
+          <span class="badge bg-danger">Unpaid</span>
+          {% endif %}
+        </td>
+        <td>₹{{ "%.2f"|format(party.remaining) }}</td>
+        <td>
+          <form
+            method="POST"
+            action="{{ url_for('party.delete_party', party_id=party.id) }}"
+          >
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{{ url_for('party.party_details') }}" class="btn btn-info mt-3"
+    >Add Party</a
+  >
+</div>
+{% endblock %}
