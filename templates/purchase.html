@@ -1,0 +1,111 @@
+{% extends "base.html" %} {% block content %}
+<h1>Purchase List</h1>
+
+<!-- User Details -->
+<div>
+  <p><strong>Firm Name:</strong> {{ user.firm_name }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Mobile:</strong> {{ user.mobile }}</p>
+  <p><strong>Timestamp:</strong> {{ timestamp }}</p>
+</div>
+
+<!-- Purchase Form -->
+<h2>Product Purchase Details</h2>
+<form id="purchaseForm">
+  <table>
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Current Quantity</th>
+        <th>Purchase Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in low_stock_items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>
+          <input
+            type="number"
+            name="purchase_qty_{{ item.id }}"
+            min="1"
+            placeholder="Qty"
+          />
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <button type="button" class="print-button" onclick="window.print();">
+      Print
+    </button>
+    <button type="submit" class="print-button">Submit Purchase</button>
+  </div>
+</form>
+
+{% endblock %} {% block styles %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .actions {
+    margin-top: 20px;
+  }
+  button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Media query for print */
+  /*@media print {
+    /* Hide the Print button when printing */
+  /* .print-button {
+      display: none;
+    }
+  }
+
+  /* Style for number input without border */
+  input[type="number"] {
+    border: none;
+    padding: 5px;
+    font-size: 14px;
+    width: 80px;
+    text-align: center;
+    background-color: #f0f0f0;
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script>
+  // The form submission can be customized later as per your requirements
+  document
+    .getElementById("purchaseForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      alert("Form submitted, but no data is being stored.");
+    });
+</script>
+{% endblock %}

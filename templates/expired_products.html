@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+<!-- Content Section -->
+<div class="container">
+  <h1 class="text-center mt-4">Expired Items</h1>
+
+  <!-- Expired Items Table -->
+  <div class="expired-items-table">
+    {% if expired_items %}
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Item Name</th>
+          <th>Expiry Date</th>
+          <th>Link to Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in expired_items %}
+        <tr>
+          <td>{{ item.item_name }}</td>
+          <td>{{ item.expiry_date }}</td>
+          <td>
+            <a
+              href="{{ item.link }}"
+              class="btn btn-info btn-sm"
+              target="_blank"
+              >View Stock</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-warning text-center mt-3" role="alert">
+      No expired items found.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

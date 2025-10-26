@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block title %}Annual Report{% endblock %} {% block
+content %}
+<div class="container mt-4">
+  <h1>Annual Report for {{ year }}</h1>
+
+  <table class="table table-bordered mt-4">
+    <thead class="table-light">
+      <tr>
+        <th>Month</th>
+        <th>Present Days</th>
+        <th>Payment</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in salaries %}
+      <tr>
+        <td>{{ record.month }}</td>
+        <td>{{ record.present_days }}</td>
+        <td>{{ record.payment }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+<!-- templates/reports.html -->
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid d-flex flex-column" style="min-height: 100vh">
+  <!-- Main Content Area -->
+  <div class="container mt-5 flex-grow-1">
+    <h2 class="text-center mb-4">Sales and Profit Reports</h2>
+
+    <div class="row">
+      <!-- Monthly Sales Report Card -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card text-white bg-info">
+          <div class="card-header text-center">
+            <h5 class="card-title">Monthly Sales</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-white">{{ month }}</h6>
+            <p class="card-text">Total Sales: ${{ total_sales_monthly }}</p>
+          </div>
+          <a class="btn btn-secondary" href="/reports/monthly_sales"
+            >View Report</a
+          >
+        </div>
+      </div>
+
+      <!-- Annual Sales Report Card -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card text-white bg-success">
+          <div class="card-header text-center">
+            <h5 class="card-title">Annual Sales</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-white">{{ year }}</h6>
+            <p class="card-text">Total Sales: ${{ total_sales_annual }}</p>
+          </div>
+          <a class="btn btn-secondary" href="/reports/annual_sales"
+            >View Report</a
+          >
+        </div>
+      </div>
+
+      <!-- Total Sales (Billing) Report Card -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card text-white bg-primary">
+          <div class="card-header text-center">
+            <h5 class="card-title">Total Sales</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Total Sales: ${{ total_sales_billing }}</p>
+          </div>
+          <a class="btn btn-secondary" href="/reports/total_sales"
+            >View Report</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Monthly Profit Report Card -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card text-white bg-warning">
+          <div class="card-header text-center">
+            <h5 class="card-title">Monthly Profit</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-white">
+              {{ month }} / {{ year }}
+            </h6>
+            <p class="card-text">Total Profit: ${{ profit }}</p>
+          </div>
+          <a class="btn btn-secondary" href="/reports/monthly_profit"
+            >View Report</a
+          >
+        </div>
+      </div>
+
+      <!-- Total Profit Report Card -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card text-white bg-danger">
+          <div class="card-header text-center">
+            <h5 class="card-title">Total Profit</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Total Profit: ${{ total_profit }}</p>
+          </div>
+          <a class="btn btn-secondary" href="/reports/profit">View Report</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html' %} {% block title %}All Purchases{% endblock %} {% block
+content %}
+<style>
+  /* Media query for print */
+  @media print {
+    /* Hide the Print button when printing */
+    .print-button {
+      display: none;
+    }
+  }
+</style>
+<div class="container mt-4">
+  <h1>Purchase List</h1>
+
+  <!-- User Details -->
+  <div>
+    <p><strong>Firm Name:</strong> {{ user.firm_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Mobile:</strong> {{ user.mobile }}</p>
+  </div>
+
+  <!-- Combined Stock Items -->
+  <h2>Items (Low Stock / Expired)</h2>
+  <form id="purchaseForm">
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Product Name</th>
+          <th>Purchase Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item_name in combined_items %}
+        <tr>
+          <td>{{ item_name }}</td>
+          <td>
+            <input
+              type="number"
+              name="purchase_qty_{{ item_name }}"
+              min="1"
+              class="form-control print-button"
+              placeholder="Qty"
+            />
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-3">
+      <button
+        type="button"
+        class="btn btn-primary print-button"
+        onclick="window.print();"
+      >
+        Print
+      </button>
+      <!-- Uncomment the button below to enable submission -->
+      <!-- <button type="submit" class="btn btn-success">Submit Purchase</button> -->
+    </div>
+  </form>
+
+  <!-- Additional Actions -->
+  <div class="mt-3">
+    <!-- Button to Add Expired Items -->
+    <!-- Uncomment this button and the associated script function if needed -->
+    <!-- <button class="btn btn-warning" onclick="addExpiredItems()">Add Expired Items</button> -->
+  </div>
+</div>
+
+<script>
+  // Prevent default form submission
+  document
+    .getElementById("purchaseForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      alert("Form submitted, but no data is being stored.");
+    });
+
+  // Function to add expired items to the list
+  function addExpiredItems() {
+    fetch("/add-expired", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Expired products added") {
+          alert("Expired products added successfully.");
+          window.location.reload(); // Refresh to show updated items
+        } else {
+          alert("Error adding expired items.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to add expired items.");
+      });
+  }
+</script>
+{% endblock %}

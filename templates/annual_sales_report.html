@@ -1,0 +1,37 @@
+<!-- templates/annual_sales_report.html -->
+{% extends "base.html" %} {% block content %}
+
+<div class="container mt-5">
+  <h1 class="text-center">Sales for Year {{ year }}</h1>
+
+  <div class="mt-4">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td><strong>Customer Name:</strong></td>
+          <td>Prasad Zunagare</td>
+        </tr>
+        <tr>
+          <td><strong>Email:</strong></td>
+          <td>test@example.com</td>
+        </tr>
+
+        <tr>
+          <td><strong>Total Sales_:</strong></td>
+          <td>${{ total_sales }}</td>
+        </tr>
+        <tr>
+          <time datetime="onclick"></time>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Print Button -->
+  <div class="text-center mt-4 no-print">
+    <button class="btn btn-secondary" onclick="window.print()">
+      Print Bill
+    </button>
+  </div>
+</div>
+{% endblock %}

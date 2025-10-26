@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <title>Stock8Ease - A Complete Inventory Solution</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Ensure body takes full height and uses flexbox */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Flex container for the content to take remaining space */
+      .container {
+        flex: 1;
+      }
+
+      .footer {
+        width: 100%;
+        margin-top: auto; /* Ensures footer stays at the bottom */
+        /*background-color: #343a40;*/
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      /* Ensure that cards take up full available height */
+      .card {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/stock/view">Stock</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/billing/create">Billing</a>
+            </li>
+            <!---
+            <li class="nav-item">
+              <a class="nav-link" href="/reports/all_sales">Reports</a>
+            </li>
+          -->
+            <li class="nav-item">
+              <a class="nav-link" href="/account/account">Profile</a>
+            </li>
+            <!--
+            <li class="nav-item">
+              <a class="nav-link" href="/staff">Staff</a>
+            </li>
+            <li class="nav-item"></li>
+              <a class="nav-link" href="/pricing.html">Pricing</a>
+            </li>
+            -->
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container mt-4">
+      <h1 class="text-center">Welcome to the Dashboard</h1>
+      <div class="row mt-4">
+        <!-- First Row -->
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-primary">
+            <div class="card-header">Total Stock Items</div>
+            <div class="card-body">
+              <h5 class="card-title" id="totalStockItems">Loading...</h5>
+              <p class="card-text">Overview of all stock items.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-success">
+            <div class="card-header">Total Sales</div>
+            <div class="card-body">
+              <h5 class="card-title" id="totalSales">Loading...</h5>
+              <p class="card-text">Track total sales amount.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-danger">
+            <div class="card-header">Total Due</div>
+            <div class="card-body">
+              <h5 class="card-title" id="totalDue">Loading...</h5>
+              <p class="card-text">Total amount due for unpaid bills.</p>
+              <a href="/customers/list" class="btn btn-primary"
+                >Send Reminders</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <!-- Second Row -->
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-warning">
+            <div class="card-header">Total Profit Today</div>
+            <div class="card-body">
+              <h5 class="card-title" id="todayProfit">Loading...</h5>
+              <p class="card-text">Total profit from sales.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-warning">
+            <div class="card-header">Total Sales Today</div>
+            <div class="card-body">
+              <h5 class="card-title" id="todaySales">Loading...</h5>
+              <p class="card-text">Total Sales For Today.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-info">
+            <div class="card-header">Top Selling Products</div>
+            <div class="card-body">
+              <h5 class="card-title" id="topSellingProducts">Loading...</h5>
+              <p class="card-text">List of top selling products.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third Row -->
+
+      <div class="row mt-4">
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-warning">
+            <div class="card-header">Total Profit</div>
+            <div class="card-body">
+              <h5 class="card-title" id="totalProfit">Loading...</h5>
+              <p class="card-text">Total profit from sales.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-danger">
+            <div class="card-header">Near Expiry Product</div>
+            <div class="card-body">
+              <h5 class="card-title" id="nearExpiry">Loading...</h5>
+              <p class="card-text">
+                Product near expiry date and a link to view the stock details.
+              </p>
+              <a href="/stock/expired-items" class="btn btn-light"
+                >Expired Items</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+          <div class="card text-white bg-dark">
+            <div class="card-header">Items with Limited Stock</div>
+            <div class="card-body">
+              <h5 class="card-title" id="limitedStockItems">Loading...</h5>
+              <p class="card-text">Items with stock quantity less than 10.</p>
+              <a href="/dashboard/purchase" class="btn btn-primary"
+                >Order Now</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-4 bg-dark">
+      <p>
+        © 2025 Stock8Ease - A Complete Inventory Solution. All Rights Reserved.
+      </p>
+    </footer>
+
+    <script>
+      // Fetch and display total stock items
+      async function fetchTotalStockItems() {
+        const response = await fetch("/stock/test-stock");
+        const data = await response.json();
+        const totalStockItems = data.length;
+        document.getElementById("totalStockItems").innerText = totalStockItems;
+      }
+
+      // Fetch and display total sales
+      function fetchTotalSales() {
+        fetch("/billing/total-sales")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.total_sales !== undefined) {
+              document.getElementById(
+                "totalSales"
+              ).textContent = `₹${data.total_sales.toFixed(2)}`;
+            } else {
+              document.getElementById("totalSales").textContent =
+                "Error fetching sales.";
+            }
+          })
+          .catch((error) => {
+            document.getElementById("totalSales").textContent =
+              "Error fetching sales.";
+            console.error("Error fetching sales:", error);
+          });
+      }
+
+      // Fetch and display top selling products
+      async function fetchTopSellingProducts() {
+        const response = await fetch("/billing/top-selling-products");
+        const data = await response.json();
+        let topSelling = "Loading...";
+
+        if (data && data.length > 0) {
+          topSelling = data
+            .map(
+              (product) => `${product.product_name} - ₹${product.total_sales}`
+            ) // Corrected reference
+            .join(", ");
+        }
+
+        document.getElementById("topSellingProducts").innerText = topSelling;
+      }
+
+      // Fetch and display total profit
+      function fetchTotalProfit() {
+        fetch("/billing/total-profit")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.total_profit !== undefined) {
+              document.getElementById(
+                "totalProfit"
+              ).textContent = `₹${data.total_profit.toFixed(2)}`;
+            } else {
+              document.getElementById("totalProfit").textContent =
+                "Error fetching profit.";
+            }
+          })
+          .catch((error) => {
+            document.getElementById("totalProfit").textContent =
+              "Error fetching profit.";
+            console.error("Error fetching profit:", error);
+          });
+      }
+
+      // Fetch and display total profit today
+      function fetchTodayProfit() {
+        fetch("/dashboard/today_sales")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.today_profit !== undefined) {
+              document.getElementById(
+                "todayProfit"
+              ).textContent = `₹${data.today_profit.toFixed(2)}`;
+            } else {
+              document.getElementById("todayProfit").textContent =
+                "Error fetching profit.";
+            }
+          })
+          .catch((error) => {
+            document.getElementById("todayProfit").textContent =
+              "Error fetching profit.";
+            console.error("Error fetching profit:", error);
+          });
+      }
+
+      // Fetch and display today sales
+      function fetchTodaySales() {
+        fetch("/dashboard/today_sales")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.today_sales !== undefined) {
+              document.getElementById(
+                "todaySales"
+              ).textContent = `₹${data.today_sales.toFixed(2)}`;
+            } else {
+              document.getElementById("todaySales").textContent =
+                "Error fetching profit.";
+            }
+          })
+          .catch((error) => {
+            document.getElementById("todaySales").textContent =
+              "Error fetching profit.";
+            console.error("Error fetching profit:", error);
+          });
+      }
+
+      async function fetchNearExpiry() {
+        try {
+          // Fetch data from the /billing/near-expiry endpoint
+          const response = await fetch("/billing/next-expiry");
+
+          // Check if the response is okay
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+
+          // Log the fetched data
+          console.log("Fetched data:", data);
+
+          // Define the default value
+          let nearExpiry = "Loading...";
+
+          // Check for valid product data and update accordingly
+          if (data.product_name) {
+            nearExpiry = `${data.product_name} - Expires on ${new Date(
+              data.expiry_date
+            ).toLocaleDateString()}`;
+          } else if (data.message) {
+            nearExpiry = data.message;
+          }
+
+          // Update the div with the product name and expiry date
+          document.getElementById("nearExpiry").innerText = nearExpiry;
+        } catch (error) {
+          console.error("Error fetching near expiry product:", error);
+          document.getElementById("nearExpiry").innerText =
+            "Error fetching data.";
+        }
+      }
+
+      // Call the function when the page is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        fetchNearExpiry();
+      });
+
+      // Fetch and display items with limited stock
+      async function fetchLimitedStockItems() {
+        const response = await fetch("/stock/test-stock");
+        const data = await response.json();
+        let limitedStockList = [];
+
+        data.forEach((stock) => {
+          if (stock.quantity < 10) {
+            limitedStockList.push(`${stock.item_name} (${stock.quantity})`);
+          }
+        });
+
+        // Join the items with commas and update the HTML element
+        document.getElementById("limitedStockItems").innerText =
+          limitedStockList.join(", ");
+      }
+
+      // Function to fetch data from the `/billing/due` endpoint
+      function fetchDueData() {
+        fetch("/billing/due")
+          .then((response) => response.json())
+          .then((data) => {
+            // Assuming the data has a 'total_due' property
+            if (data && data.total_due !== undefined) {
+              document.getElementById(
+                "totalDue"
+              ).textContent = `$${data.total_due.toFixed(2)}`;
+            } else {
+              document.getElementById("totalDue").textContent =
+                "No data available";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching due data:", error);
+            document.getElementById("totalDue").textContent =
+              "Error loading data";
+          });
+      }
+
+      // Call the function to fetch and display data when the page loads
+      document.addEventListener("DOMContentLoaded", fetchDueData);
+
+      // Run all fetch functions
+      fetchTotalStockItems();
+      fetchTotalSales();
+      fetchTopSellingProducts();
+      fetchTotalProfit();
+      fetchLimitedStockItems();
+      fetchTodayProfit();
+      fetchTodaySales();
+      fetchDueData();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

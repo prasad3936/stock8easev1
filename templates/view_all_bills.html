@@ -1,0 +1,168 @@
+{% extends "base.html" %} {% block content %}
+<!-- Navigation Bar 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/dashboard">Dashboard</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/stock/view">Stock</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/billing/create">Billing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/reports/all_sales">Reports</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/account/account">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>-->
+
+<div class="container">
+  <h1 class="text-center mt-4">All Bills</h1>
+
+  <!-- Bills Table -->
+  <div class="mt-4">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Bill ID</th>
+          <th>Customer Name</th>
+          <th>Customer Mobile</th>
+          <th>Product Details</th>
+          <th>Total Price</th>
+          <th>Timestamp</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bill_id, bill_data in bills.items() %}
+        <tr>
+          <td>{{ bill_id }}</td>
+          <td>{{ bill_data.customer_name }}</td>
+          <td>{{ bill_data.customer_mobile }}</td>
+          <td>
+            {% for product in bill_data.products %} {{ product.product_code }}
+            ({{ product.product_name }}) - Qty: {{ product.quantity }} {% if not
+            loop.last %}, {% endif %} {% endfor %}
+          </td>
+          <td>${{ bill_data.total_price }}</td>
+          <td>{{ bill_data.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td class="status-text">{{ bill_data.status }}</td>
+          <td>
+            <!-- Change Status Button -->
+            <button
+              class="btn btn-warning btn-sm change-status"
+              data-bill-id="{{ bill_id }}"
+              data-current-status="{{ bill_data.status }}"
+            >
+              {% if bill_data.status == 'Paid' %} Mark as Unpaid {% else %} Mark
+              as Paid {% endif %}
+            </button>
+            <a
+              href="{{ url_for('billing.view_bill', bill_id=bill_id) }}"
+              class="btn btn-info btn-sm"
+              >View</a
+            >
+            <a
+              href="{{ url_for('billing.delete_bill', bill_id=bill_id) }}"
+              class="btn btn-danger btn-sm"
+              onclick="return confirm('Are you sure you want to delete this bill?')"
+              >Delete</a
+            >
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8" class="text-center">No bills available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Delete All Bills Button -->
+  <div class="text-center mt-4">
+    <form
+      action="{{ url_for('billing.delete_all_bills') }}"
+      method="POST"
+      onsubmit="return confirm('Are you sure you want to delete all bills? This action cannot be undone.')"
+    >
+      <button type="submit" class="btn btn-danger">Delete All Bills</button>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery and AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Event listener for the change status button
+    $(".change-status").click(function () {
+      var $button = $(this); // Store the button reference
+      var billId = $button.data("bill-id");
+      var currentStatus = $button.data("current-status");
+      var newStatus = currentStatus === "Paid" ? "Unpaid" : "Paid";
+
+      // Make an AJAX request to update the status
+      $.ajax({
+        url: "/billing/update_status/" + billId,
+        method: "POST",
+        data: { status: newStatus },
+        success: function (response) {
+          // Update status in the UI
+          if (newStatus === "Paid") {
+            $button.text("Mark as Unpaid");
+            $button.data("current-status", "Paid");
+            $button.closest("tr").find(".status-text").text("Paid");
+          } else {
+            $button.text("Mark as Paid");
+            $button.data("current-status", "Unpaid");
+            $button.closest("tr").find(".status-text").text("Unpaid");
+          }
+        },
+        error: function (error) {
+          // Handle error
+          console.error("Error updating status");
+        },
+      });
+    });
+  });
+</script>
+{% endblock %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+/>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+  }
+  .table th,
+  .table td {
+    text-align: center;
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

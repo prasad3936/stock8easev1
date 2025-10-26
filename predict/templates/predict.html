@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sales Prediction</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2rem;
+      }
+      .card {
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 1rem;
+        background-color: #f9f9f9;
+      }
+      .label {
+        font-weight: bold;
+        margin-top: 1rem;
+      }
+      select {
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sales Prediction Summary</h1>
+
+    <label for="timeRange">Select Time Range:</label>
+    <select id="timeRange">
+      <option value="today">Today</option>
+      <option value="this_month">This Month</option>
+      <option value="last_3_months">Last 3 Months</option>
+      <option value="last_6_months">Last 6 Months</option>
+      <option value="last_12_months" selected>Last 12 Months</option>
+    </select>
+
+    <div class="card" id="mostSoldCard">
+      <div class="label">Most Sold Product:</div>
+      <div id="mostProduct">—</div>
+      <div id="mostQuantity">—</div>
+    </div>
+
+    <div class="card" id="leastSoldCard">
+      <div class="label">Least Sold Product:</div>
+      <div id="leastProduct">—</div>
+      <div id="leastQuantity">—</div>
+    </div>
+
+    <!-- Safe dynamic data injection -->
+    <script id="sales-data" type="application/json">
+      {{ data | tojson | safe }}
+    </script>
+
+    <script>
+      const salesData = JSON.parse(
+        document.getElementById("sales-data").textContent
+      );
+
+      const select = document.getElementById("timeRange");
+      const mostProduct = document.getElementById("mostProduct");
+      const mostQuantity = document.getElementById("mostQuantity");
+      const leastProduct = document.getElementById("leastProduct");
+      const leastQuantity = document.getElementById("leastQuantity");
+
+      function updateUI(range) {
+        const data = salesData[range] || {};
+        const most = data.most_sold || {};
+        const least = data.least_sold || {};
+
+        if (most && most.product_name) {
+          mostProduct.textContent = `${most.product_name} (${most.product_code})`;
+          mostQuantity.textContent = `Quantity: ${most.total_quantity}`;
+        } else {
+          mostProduct.textContent = "No data";
+          mostQuantity.textContent = "";
+        }
+
+        if (least && least.product_name) {
+          leastProduct.textContent = `${least.product_name} (${least.product_code})`;
+          leastQuantity.textContent = `Quantity: ${least.total_quantity}`;
+        } else {
+          leastProduct.textContent = "No data";
+          leastQuantity.textContent = "";
+        }
+      }
+
+      // Initial load
+      updateUI(select.value);
+
+      // Change handler
+      select.addEventListener("change", (e) => {
+        updateUI(e.target.value);
+      });
+    </script>
+  </body>
+</html>

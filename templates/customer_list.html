@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid d-flex flex-column" style="min-height: 100vh">
+  <div class="flex-grow-1">
+    <h2 class="text-center my-4">Customer List</h2>
+
+    <!-- Table to display customer list with total unpaid bill -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Customer Name</th>
+          <th>Mobile Number</th>
+          <th>Total Unpaid Bill</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for customer in customers %}
+        <tr>
+          <td>{{ customer.customer_name }}</td>
+          <td>{{ customer.customer_mobile }}</td>
+          <td>{{ customer.total_unpaid }}</td>
+          <td>
+            <a
+              href="{{ url_for('customer_service.send_reminder', customer_name=customer.customer_name, customer_mobile=customer.customer_mobile) }}"
+              class="btn btn-warning"
+              >Send Reminder</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

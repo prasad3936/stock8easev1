@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ledger - Login</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      /* Hide elements not needed in print view */
+      @media print {
+        .no-print {
+          display: none;
+        }
+      }
+
+      /* Copyright notice styling */
+      .copyright {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      /* Center the form elements */
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(to right, #6a11cb, #37a2fc);
+      }
+
+      .form-container {
+        width: 500px;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .form-container h2 {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        font-weight: 600;
+      }
+
+      .form-container .form-label {
+        font-size: 1.1rem;
+        color: #555;
+      }
+
+      .form-container .form-control {
+        font-size: 1.1rem;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        width: 100%; /* Match width to button */
+      }
+
+      .form-container .form-control:focus {
+        border-color: #37a2fc;
+        box-shadow: 0 0 5px rgba(55, 162, 252, 0.5);
+      }
+
+      .form-container .btn {
+        font-size: 1.2rem;
+        padding: 12px 20px;
+        width: 100%; /* Match width to input fields */
+        background-color: #37a2fc;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+
+      .form-container .btn:hover {
+        background-color: #6a11cb;
+        cursor: pointer;
+      }
+
+      .form-container .btn:active {
+        background-color: #5a09a1;
+      }
+
+      /* Link styles */
+      .form-container .text-center a {
+        font-size: 0.9rem;
+        color: #37a2fc;
+      }
+
+      .form-container .text-center a:hover {
+        text-decoration: underline;
+      }
+
+      .form-container .text-center .mt-3 {
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <div class="form-container">
+        <h2>Login</h2>
+        <form method="POST" action="/login">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="text-center mt-3">
+          <a href="/account/add">Do not have Account?Sign Up</a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2024 By Stock8Ease - A Complete Inventory Solution. All rights
+      reserved.
+    </div>
+  </body>
+</html>

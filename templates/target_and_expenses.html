@@ -1,0 +1,90 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h1 class="text-center">Target and Expenses Overview</h1>
+
+  <!-- Target and Expense Summary -->
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Target Overview</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Target Category</th>
+            <th>Target Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Example dynamic data -->
+          <tr>
+            <td>Sales</td>
+            <td>${{ target_sales }}</td>
+          </tr>
+          <tr>
+            <td>Marketing</td>
+            <td>${{ target_marketing }}</td>
+          </tr>
+          <tr>
+            <td>Development</td>
+            <td>${{ target_development }}</td>
+          </tr>
+          <!-- Add more target categories dynamically as needed -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <h3>Expenses Overview</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Expense Category</th>
+            <th>Expense Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Example dynamic data -->
+          <tr>
+            <td>Rent</td>
+            <td>${{ expense_rent }}</td>
+          </tr>
+          <tr>
+            <td>Salaries</td>
+            <td>${{ expense_salaries }}</td>
+          </tr>
+          <tr>
+            <td>Utilities</td>
+            <td>${{ expense_utilities }}</td>
+          </tr>
+          <!-- Add more expense categories dynamically as needed -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h3>Summary</h3>
+      <p><strong>Total Target: ${{ total_target }}</strong></p>
+      <p><strong>Total Expenses: ${{ total_expenses }}</strong></p>
+      <p><strong>Remaining Balance: ${{ remaining_balance }}</strong></p>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+/>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+  }
+  .table-container {
+    margin-top: 30px;
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

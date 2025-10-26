@@ -1,0 +1,59 @@
+<!-- templates/add_stock.html -->
+{% extends "base.html" %} {% block content %}
+<div class="container mt-4">
+  <h2>Add Stock</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="item_name" class="form-label">Item Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="item_name"
+        name="item_name"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="selling_price" class="form-label">Selling Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="selling_price"
+        name="selling_price"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Purchase Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="price"
+        name="price"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="expiry" class="form-label">Expiry Date</label>
+      <input
+        type="date"
+        class="form-control"
+        id="expiry"
+        name="expiry"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="quantity" class="form-label">Quantity</label>
+      <input
+        type="number"
+        class="form-control"
+        id="quantity"
+        name="quantity"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Stock</button>
+  </form>
+</div>
+{% endblock %}

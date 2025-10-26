@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center">Total Sales</h1>
+
+  <div class="mt-4">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td><strong>Customer Name:</strong></td>
+          <td>{{ customer_name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Email:</strong></td>
+          <td>{{ customer_email }}</td>
+        </tr>
+
+        <tr>
+          <td><strong>Total Monthly Sales:</strong></td>
+          <td>${{ total_sales }}</td>
+        </tr>
+        <tr>
+          <td><strong>Report Date:</strong></td>
+          <td>{{ report_date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Print Button -->
+  <div class="text-center mt-4 no-print">
+    <button class="btn btn-secondary" onclick="window.print()">
+      Print Bill
+    </button>
+  </div>
+</div>
+{% endblock %} {% block styles %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+/>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+  }
+  .no-print {
+    display: block;
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

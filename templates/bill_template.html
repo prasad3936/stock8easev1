@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% block title %}Bill{% endblock %} {% block content
+%}
+<style>
+  /* Media query for print */
+  @media print {
+    /* Hide the Print button when printing */
+    .print-button {
+      display: none;
+    }
+  }
+</style>
+<div class="container mt-5">
+  <h1 class="text-center">Billing Details</h1>
+
+  <div class="mt-4">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td><strong>Customer Name:</strong></td>
+          <td>{{ bills[0].customer_name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Customer Mobile:</strong></td>
+          <td>{{ bills[0].customer_mobile }}</td>
+        </tr>
+        <tr>
+          <td><strong>Bill ID:</strong></td>
+          <td>{{ bills[0].bill_id }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="mt-4">Products</h3>
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Product Code</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+          <th>Status</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bill in bills %}
+        <tr>
+          <td>{{ bill.product_code }}</td>
+          <td>{{ bill.quantity }}</td>
+          <td>${{ bill.total_price }}</td>
+          <td>{{ bill.status }}</td>
+          <td>{{ bill.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="mt-4"><strong>Total Price: </strong>${{ total_price }}</div>
+    <!-- Uncomment the following line if "Total Profit" is required -->
+    <!-- <div><strong>Total Profit: </strong>${{ total_profit }}</div> -->
+  </div>
+
+  <!-- Print Button -->
+  <div class="text-center mt-4 no-print">
+    <button class="btn btn-secondary print-button" onclick="window.print()">
+      Print Bill
+    </button>
+    <a
+      href="{{ url_for('billing.view_all_bills') }}"
+      class="btn btn-primary print-button"
+    >
+      View All Bills
+    </a>
+  </div>
+</div>
+{% endblock %}

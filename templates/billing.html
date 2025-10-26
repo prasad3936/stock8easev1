@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block title %}Billing{% endblock %} {% block
+content %}
+<div class="container mt-5">
+  <h1 class="text-center">Billing</h1>
+
+  <!-- Billing Form -->
+  <form action="{{ url_for('billing') }}" method="POST" class="mt-4">
+    <div class="mb-3">
+      <label for="customer_name" class="form-label">Customer Name:</label>
+      <input
+        type="text"
+        id="customer_name"
+        name="customer_name"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="mobile_number" class="form-label">Mobile Number:</label>
+      <input
+        type="text"
+        id="mobile_number"
+        name="mobile_number"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="product_code" class="form-label">Product Code:</label>
+      <input
+        type="text"
+        id="product_code"
+        name="product_code"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate Bill</button>
+  </form>
+
+  <!-- Back to Dashboard -->
+  <div class="mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+      Back to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

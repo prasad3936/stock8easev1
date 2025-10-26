@@ -1,0 +1,112 @@
+{% extends 'base.html' %} 
+{% block title %}Invoice{% endblock %} 
+{% block content %}
+<style>
+  /* Media query for print */
+  @media print {
+    .print-button {
+      display: none;
+    }
+  }
+
+  .invoice-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .invoice-header h1 {
+    margin: 0;
+  }
+
+  .invoice-details, .invoice-products {
+    margin-top: 20px;
+  }
+
+  .invoice-summary {
+    margin-top: 30px;
+    text-align: right;
+  }
+
+  .invoice-footer {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="invoice-header">
+    <h1>Invoice</h1>
+    <p><strong>Date:</strong> {{ bills[0].timestamp.strftime('%Y-%m-%d') }}</p>
+  </div>
+
+  <div class="invoice-details">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td><strong>Customer Name:</strong></td>
+          <td>{{ bills[0].customer_name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Customer Mobile:</strong></td>
+          <td>{{ bills[0].customer_mobile }}</td>
+        </tr>
+        <tr>
+          <td><strong>Invoice ID:</strong></td>
+          <td>{{ bills[0].bill_id }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="invoice-products">
+    <h3>Products</h3>
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Product Code</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Total Price</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bill in bills %}
+        <tr>
+          <td>{{ bill.product_code }}</td>
+          <td>{{ bill.quantity }}</td>
+          <td>${{ bill.unit_price }}</td>
+          <td>${{ bill.total_price }}</td>
+          <td>{{ bill.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="invoice-summary">
+    <p><strong>Total Price:</strong> ${{ total_price }}</p>
+    <!-- Uncomment the following line if "Total Profit" is required -->
+    <!-- <p><strong>Total Profit:</strong> ${{ total_profit }}</p> -->
+  </div>
+
+  <div class="text-center mt-4 no-print">
+    <button class="btn btn-secondary print-button" onclick="window.print()">
+      Print Invoice
+    </button>
+    <a
+      href="{{ url_for('billing.view_all_bills') }}"
+      class="btn btn-primary print-button"
+    >
+      View All Invoices
+    </a>
+  </div>
+
+  <div class="invoice-footer">
+    <p>Thank you for your business!</p>
+    <p>If you have any questions, please contact us at support@example.com.</p>
+  </div>
+</div>
+{% endblock %}</div>

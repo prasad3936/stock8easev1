@@ -1,0 +1,29 @@
+<!-- templates/monthly_sales_report.html -->
+{% extends "base.html" %}
+
+<div class="container mt-5">
+  <h1 class="text-center">Monthly Sales for {{ month }}/{{ year }}</h1>
+
+  <div class="mt-4">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td><strong>Customer Name:</strong></td>
+          <td>Prasad Zunagare</td>
+        </tr>
+        <tr>
+          <td><strong>Email:</strong></td>
+          <td>test@example.com</td>
+        </tr>
+        {%block content%} {% endblock %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Print Button -->
+  <div class="text-center mt-4 no-print">
+    <button class="btn btn-secondary" onclick="window.print()">
+      Print Bill
+    </button>
+  </div>
+</div>

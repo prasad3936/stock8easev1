@@ -1,0 +1,184 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid d-flex flex-column" style="min-height: 100vh">
+  <div class="flex-grow-1">
+    <h2 class="text-center my-4">Create Bill</h2>
+    <form method="POST">
+      <div class="mb-3">
+        <label for="customer_name" class="form-label">Customer Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="customer_name"
+          name="customer_name"
+          required
+        />
+        <ul
+          id="customer_name_list"
+          class="list-group"
+          style="position: absolute; width: 100%; display: none"
+        ></ul>
+      </div>
+      <div class="mb-3">
+        <label for="customer_mobile" class="form-label">Mobile Number</label>
+        <input
+          type="text"
+          class="form-control"
+          id="customer_mobile"
+          name="customer_mobile"
+          required
+        />
+      </div>
+
+      <!-- Container for dynamic product entries -->
+      <div id="product_entries" class="mb-3">
+        <label class="form-label">Products</label>
+        <div class="product-entry d-flex align-items-center mb-2">
+          <select
+            class="form-control product-code-select"
+            name="product_code"
+            required
+          >
+            <option value="" disabled selected>Select a product code</option>
+            {% for code in product_codes %}
+            <option value="{{ code[0] }}">{{ code[0] }}</option>
+            {% endfor %}
+          </select>
+          <input
+            type="number"
+            class="form-control quantity-input ms-2"
+            name="quantity"
+            placeholder="Quantity"
+            min="1"
+            required
+          />
+          <button type="button" class="btn btn-danger btn-remove ms-2">
+            &times;
+          </button>
+        </div>
+      </div>
+
+      <!-- Button to add more product entries -->
+      <button type="button" id="add_product" class="btn btn-secondary mb-3">
+        Add Product
+      </button>
+
+      <div class="mb-3">
+        <label for="status" class="form-label">Bill Status</label><br />
+        <!-- Toggle Switch for Paid/Unpaid -->
+        <label class="switch">
+          <input type="checkbox" name="status" id="status" />
+          <span class="slider round"></span>
+        </label>
+        <span id="status_label">Paid</span>
+      </div>
+      <button type="submit" class="btn btn-primary">Create Bill</button>
+      <a href="/billing/all" class="btn btn-primary">All Bills</a>
+    </form>
+  </div>
+</div>
+
+<!-- Add jQuery and Select2 JS and CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    // Initialize Select2 on product code dropdowns
+    function initializeSelect2() {
+      $(".product-code-select").select2({
+        placeholder: "Select a product code",
+        allowClear: true,
+      });
+    }
+    initializeSelect2();
+
+    // Add new product entry
+    $("#add_product").click(function () {
+      const newProductEntry = `
+        <div class="product-entry d-flex align-items-center mb-2">
+          <select
+            class="form-control product-code-select"
+            name="product_code"
+            required
+          >
+            <option value="" disabled selected>Select a product code</option>
+            {% for code in product_codes %}
+            <option value="{{ code[0] }}">{{ code[0] }}</option>
+            {% endfor %}
+          </select>
+          <input
+            type="number"
+            class="form-control quantity-input ms-2"
+            name="quantity"
+            placeholder="Quantity"
+            min="1"
+            required
+          />
+          <button type="button" class="btn btn-danger btn-remove ms-2">&times;</button>
+        </div>
+      `;
+      $("#product_entries").append(newProductEntry);
+      initializeSelect2();
+    });
+
+    // Remove a product entry
+    $(document).on("click", ".btn-remove", function () {
+      $(this).closest(".product-entry").remove();
+    });
+
+    // Toggle status label on checkbox change
+    $("#status").change(function () {
+      $("#status_label").text(this.checked ? "Paid" : "Unpaid");
+    });
+
+    // Customer Name search functionality
+    $("#customer_name").on("input", function () {
+      var query = $(this).val();
+      if (query.length > 2) {
+        // Trigger search after 3 characters
+        $.ajax({
+          url: "/billing/search_customer",
+          data: { query: query },
+          success: function (response) {
+            var listItems = "";
+            response.forEach(function (customer) {
+              listItems += `
+                <li class="list-group-item customer-item" 
+                    data-name="${customer.customer_name}" 
+                    data-mobile="${customer.customer_mobile}">
+                  ${customer.customer_name}
+                </li>`;
+            });
+            $("#customer_name_list").html(listItems).show();
+          },
+        });
+      } else {
+        $("#customer_name_list").hide();
+      }
+    });
+
+    // Auto-fill mobile number when customer name is selected
+    $(document).on("click", ".customer-item", function () {
+      $("#customer_name").val($(this).data("name"));
+      $("#customer_mobile").val($(this).data("mobile"));
+      $("#customer_name_list").hide();
+    });
+
+    // Allow manual input for mobile number
+    $("#customer_mobile").on("input", function () {
+      $("#customer_name_list").hide();
+    });
+
+    // Hide the suggestions list when clicking outside
+    $(document).on("click", function (e) {
+      if (!$(e.target).closest("#customer_name, #customer_name_list").length) {
+        $("#customer_name_list").hide();
+      }
+    });
+  });
+</script>
+{% endblock %}

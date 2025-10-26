@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock8Ease - Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .container {
+        flex: 1;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .dashboard-item {
+        padding: 1rem;
+        color: #fff;
+        border-radius: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .large {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+
+      .bg-primary {
+        background-color: #007bff;
+      }
+
+      .bg-success {
+        background-color: #28a745;
+      }
+
+      .bg-warning {
+        background-color: #ffc107;
+        color: #000;
+      }
+
+      .bg-info {
+        background-color: #17a2b8;
+      }
+
+      .bg-danger {
+        background-color: #dc3545;
+      }
+
+      .bg-dark {
+        background-color: #343a40;
+      }
+
+      footer {
+        margin-top: auto;
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/stock/view">Stock</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/billing/create">Billing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/reports/all_sales">Reports</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/account/account">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+      <h1 class="text-center">Welcome to the Dashboard</h1>
+
+      <div class="dashboard-grid">
+        <!-- Large Cards -->
+        <div class="dashboard-item bg-danger large">
+          <h2>Near Expiry Product</h2>
+          <p id="nearExpiry">Loading...</p>
+          <a href="/stock/expired-items" class="btn btn-light">Expired Items</a>
+        </div>
+
+        <div class="dashboard-item bg-dark large">
+          <h2>Items with Limited Stock</h2>
+          <p id="limitedStockItems">Loading...</p>
+        </div>
+
+        <!-- Smaller Cards -->
+        <div class="dashboard-item bg-primary">
+          <h3>Total Stock Items</h3>
+          <p id="totalStockItems">Loading...</p>
+        </div>
+
+        <div class="dashboard-item bg-success">
+          <h3>Total Sales</h3>
+          <p id="totalSales">Loading...</p>
+        </div>
+
+        <div class="dashboard-item bg-warning">
+          <h3>Total Profit Today</h3>
+          <p id="todayProfit">Loading...</p>
+        </div>
+
+        <div class="dashboard-item bg-warning">
+          <h3>Total Sales Today</h3>
+          <p id="todaySales">Loading...</p>
+        </div>
+
+        <div class="dashboard-item bg-info">
+          <h3>Top Selling Products</h3>
+          <p id="topSellingProducts">Loading...</p>
+        </div>
+
+        <div class="dashboard-item bg-primary">
+          <h3>Total Profit</h3>
+          <p id="totalProfit">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        &copy; 2025 Stock8Ease - A Complete Inventory Solution. All Rights
+        Reserved.
+      </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

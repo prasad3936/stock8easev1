@@ -1,0 +1,72 @@
+{% extends 'base.html' %} {% block title %}Create Account{% endblock %} {% block
+content %}
+<div class="container mt-5">
+  <h1 class="text-center">Create Account</h1>
+
+  <!-- Account Creation Form -->
+  <form method="POST" action="/account/add" class="mt-4">
+    <!-- Username -->
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        required
+      />
+    </div>
+
+    <!-- Firm Name -->
+    <div class="mb-3">
+      <label for="firm_name" class="form-label">Firm</label>
+      <input
+        type="text"
+        class="form-control"
+        id="firm_name"
+        name="firm_name"
+        required
+      />
+    </div>
+
+    <!-- Mobile -->
+    <div class="mb-3">
+      <label for="mobile" class="form-label">Mobile</label>
+      <input
+        type="text"
+        class="form-control"
+        id="mobile"
+        name="mobile"
+        required
+      />
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      />
+    </div>
+
+    <!-- Password -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Create Account</button>
+  </form>
+</div>
+{% endblock %}
